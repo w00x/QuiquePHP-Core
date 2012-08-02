@@ -24,3 +24,6 @@ create:
     - includes.php
     - run.php
     - status.yml
+delete:
+  files:
+    - cache/QuiqueCache.php
