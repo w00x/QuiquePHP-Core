@@ -13,6 +13,7 @@ create:
     - model
     - routes
   files:
+    - cache/QuiqueCache.php
     - config/QuiqueConfig.php
     - controller/QuiqueController.php
     - exceptions/QuiqueExceptions.php
@@ -23,6 +24,3 @@ create:
     - includes.php
     - run.php
     - status.yml
-delete:
-  files:
-    - cache/QuiqueCache.php
