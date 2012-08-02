@@ -89,7 +89,7 @@ if($is_cache) {
     $file_config = "cache_routes.yml";
     $config_cache = QuiqueConfig::get_arr_yml_config($file_config);
     
-    $cache = new Cache($config_cache["cache_all"],$config_cache["page_cached"]);
+    $cache = new QuiqueCache($config_cache["cache_all"],$config_cache["page_cached"]);
     $cache->start($time_cache);
 }
 

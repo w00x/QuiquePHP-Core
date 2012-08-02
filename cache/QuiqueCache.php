@@ -1,6 +1,6 @@
 <?php
 
-class Cache {
+class QuiqueCache {
     private $cache_link;
     private $cachedir;
     private $cache_all;

@@ -1,3 +1,26 @@
 ---
 version: 1
 date: 01-08-2012
+create:
+  dirs:
+    - cache
+    - config
+    - controller
+    - exceptions
+    - html_errors
+    - libs
+    - libs/spyc
+    - model
+    - routes
+  files:
+    - cache/Cache.php
+    - config/QuiqueConfig.php
+    - controller/QuiqueController.php
+    - exceptions/QuiqueExceptions.php
+    - html_errors/404.php
+    - libs/spyc/spyc.php
+    - model/QuiqueModel.php
+    - routes/QuiqueRoute.php
+    - includes.php
+    - run.php
+    - status.yml
