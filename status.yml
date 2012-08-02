@@ -13,7 +13,7 @@ create:
     - model
     - routes
   files:
-    - cache/Cache.php
+    - cache/QuiqueCache.php
     - config/QuiqueConfig.php
     - controller/QuiqueController.php
     - exceptions/QuiqueExceptions.php
