@@ -125,6 +125,9 @@ if(file_exists($require_path)) {
         if(method_exists($controller, $action_name)) {
             $controller->$action_name();
         }
+        elseif($action_name != null) {
+            require_once 'html_errors/404.php';
+        }
         else {
             $controller->index();
         }

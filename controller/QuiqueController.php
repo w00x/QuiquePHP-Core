@@ -3,7 +3,7 @@
 class QuiqueController {
     private $vista;
     private $controller;
-    private $__params;
+    protected $__params;
     
     public function __construct() {
         $helper_path = APP_PATH.'/'.MODULE_NAME.'/helpers/'.CONTROLLER_NAME.'_helper.php';
@@ -83,7 +83,7 @@ class QuiqueController {
 
             foreach ($list_css as $css_file) {
                 if($css_file != "." && $css_file != "..") {
-                    echo '<link href="'.URL_BASE.'assets/'.MODULE_NAME.'/css/'.$css_file.'" rel="stylesheet" type="text/css">'.PHP_EOL;
+                    echo '<link href="'.URL_BASE.'/assets/'.MODULE_NAME.'/css/'.$css_file.'" rel="stylesheet" type="text/css">'.PHP_EOL;
                 }
             }
         }
@@ -104,7 +104,7 @@ class QuiqueController {
 
             foreach ($list_js as $js_file) {
                 if($js_file != "." && $js_file != "..") {
-                    echo '<script type="text/javascript" src="'.URL_BASE.'assets/'.MODULE_NAME.'/js/'.$js_file.'"></script>'.PHP_EOL;
+                    echo '<script type="text/javascript" src="'.URL_BASE.'/assets/'.MODULE_NAME.'/js/'.$js_file.'"></script>'.PHP_EOL;
                 }
             }
         }
@@ -122,7 +122,16 @@ class QuiqueController {
         $this->__params = $par;
     }
     
+    public function get_params() {
+        return $this->__params;
+    }
+    
     public function echo_meta_charset() {
         echo '<meta charset="'.ENCODING.'" />';
+    }
+    
+    public function url_for($route_name, $params = array()) {
+        $routes = new QuiqueRoute();
+        return $routes->url_for($route_name, $params);
     }
 }

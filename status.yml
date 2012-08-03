@@ -1,6 +1,6 @@
 ---
-version: 1
-date: 01-08-2012
+version: 2
+date: 02-08-2012
 create:
   dirs:
     - cache

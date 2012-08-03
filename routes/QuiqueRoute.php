@@ -186,31 +186,74 @@ class QuiqueRoute {
         return false;
     }
     
+    public function url_for($route_name,$params = array()) {
+        require_once 'spyc/spyc.php';
+        
+        $path_routes = CONFIG_PATH.'/routes.yml';
+        if(file_exists($path_routes)) {
+            $routes = Spyc::YAMLLoad($path_routes);
+        }
+        else {
+            try {
+                throw new QuiqueExceptions(SHOW_ERRORS,"Error Routes","Archivo de configuracion de rutas no existe");
+            }
+            catch(QuiqueExceptions $ex) {
+                $ex->echoHTMLMessage();
+            }
+        }
+        
+        $route_data = $this->get_ruta_by_nombre($route_name,$routes);
+        $params_route = $this->variables_route($route_data["route"]);
+        
+        if(count($params_route) > 0) {
+            if(count($params_route) == count($params)) {
+                $route = $route_data["route"];
+                foreach($params_route as $pa_route) {
+                    if(isset($params[$pa_route])) {
+                        $route = str_replace(":".$pa_route, $params[$pa_route], $route);
+                    }
+                    else {
+                        return false;
+                    }
+                }
+                return URL_BASE.$route;
+            }
+            else {
+                return false;
+            }
+        }
+        else {
+            return URL_BASE.$route_data["route"];
+        }
+    }
+    
     private function variables_route($route) {
         $url_tmp = $route;
         
         if($route[strlen($route)-1] != "/") {
             $url_tmp = $url_tmp."/";
         }
-        
         $variables = array();
-        do {
-            $pos_dos_puntos = strpos($url_tmp, ":");
-            $url_tmp = substr($url_tmp,$pos_dos_puntos+1);
-            $pos_slash = strpos($url_tmp,"/");
-            $tmp = substr($url_tmp, 0,$pos_slash);
-            if($tmp !== false) {
-                $variables[] = $tmp;
-            }
-            $url_tmp = substr($url_tmp,$pos_slash+1);
-        } while($pos_slash !== false);
-        
+        if(strpos($url_tmp, ":") !== false) {
+            
+            do {
+                $pos_dos_puntos = strpos($url_tmp, ":");
+                $url_tmp = substr($url_tmp,$pos_dos_puntos+1);
+                $pos_slash = strpos($url_tmp,"/");
+                $tmp = substr($url_tmp, 0,$pos_slash);
+                if($tmp !== false) {
+                    $variables[] = $tmp;
+                }
+                $url_tmp = substr($url_tmp,$pos_slash+1);
+            } while($pos_slash !== false);
+        }
         return $variables;
     }
     
     private function get_ruta_by_nombre($name,$routes) {
-        foreach($routes as $route) {
+        foreach($routes as $key => $route) {
             if($route["name"] == $name) {
+                $route["route"] = $key;
                 return $route;
             }
         }
