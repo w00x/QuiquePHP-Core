@@ -42,7 +42,18 @@ else {
         }
     }
     else {
-        if(count($requestURI) == 3) {
+        if((count($requestURI) == 3) || (count($requestURI) == 4 && $requestURI[3] == "")) {
+            define('MODULE_NAME','default');
+            define('CONTROLLER_NAME',$requestURI[1]);
+            if(is_null($requestURI[2])) {
+                define('ACTION_NAME',null);
+            }
+            else {
+                define('ACTION_NAME',$requestURI[2]);
+            }
+            $params = array();
+        }
+        elseif(count($requestURI) == 2) {
             define('MODULE_NAME','default');
             define('CONTROLLER_NAME',$requestURI[1]);
             if(is_null($requestURI[2])) {
@@ -125,11 +136,14 @@ if(file_exists($require_path)) {
         if(method_exists($controller, $action_name)) {
             $controller->$action_name();
         }
-        elseif($action_name != null) {
-            require_once 'html_errors/404.php';
+        elseif(is_null($action_name)) {
+            $controller->index();
+        }
+        elseif($action_name == "") {
+            $controller->index();
         }
         else {
-            $controller->index();
+            require_once 'html_errors/404.php';
         }
     }
     catch(Exception $ex) {

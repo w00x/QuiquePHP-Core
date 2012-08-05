@@ -66,28 +66,6 @@ class QuiqueModel {
         }
     }
     
-    public static function stc_sql_query($sql,$params = array()) {
-        try {
-            $sth = $this->dbh->prepare($sql);
-
-            if(count($params) > 0) {
-                $sth->execute($params);
-            }
-            else {
-                $sth->execute();
-            }
-            return $sth;
-        }
-        catch(PDOException $e) {
-            try {
-                throw new QuiqueExceptions(SHOW_ERRORS,"Error DB",$e->getMessage());
-            }
-            catch(QuiqueExceptions $ex) {
-                $ex->echoHTMLMessage();
-            }
-        }
-    }
-    
     public function select($columns) {
         $this->sql_select = " ".$columns." ";
     }
@@ -107,11 +85,6 @@ class QuiqueModel {
         return $this->sql_query($sql.$sql_where,$arr_params)->fetchAll(PDO::FETCH_ASSOC);
     }
     
-    public function where_stmt($sql_where,$arr_params = array()) {
-        $sql = "SELECT {$this->sql_select} FROM {$this->model_name} WHERE ";
-        return $this->sql_query($sql.$sql_where,$arr_params);
-    }
-    
     public function delete_where($sql_where,$arr_params = array()) {
         $sql = "DELETE FROM {$this->model_name} WHERE ";
         return $this->sql_query($sql.$sql_where,$arr_params)->fetchAll(PDO::FETCH_ASSOC);
@@ -129,17 +102,7 @@ class QuiqueModel {
         }
         elseif(strpos($function_name,"findAllBy") !== FALSE) {
             $column = strtolower(str_replace("findAllBy", "", $function_name));
-            $val = $this->where($column." = :".$column." ", array(":".$column => $arguments[0]));
-            return $val[0];
-        }
-        elseif(strpos($function_name,"findStmtBy") !== FALSE) {
-            $column = strtolower(str_replace("findBy", "", $function_name));
-            $val = $this->where_stmt($column." = :".$column." LIMIT 1", array(":".$column => $arguments[0]));
-            return $val[0];
-        }
-        elseif(strpos($function_name,"findStmtAllBy") !== FALSE) {
-            $column = strtolower(str_replace("findAllBy", "", $function_name));
-            $val = $this->where_stmt($column." = :".$column." ", array(":".$column => $arguments[0]));
+            $val = $this->where($column." = :".$column." LIMIT 1", array(":".$column => $arguments[0]));
             return $val[0];
         }
         elseif(strpos($function_name,"deleteBy") !== FALSE) {
