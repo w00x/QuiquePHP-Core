@@ -92,7 +92,7 @@ class QuiqueRoute {
                     return array("app"=>$ruta_default["app"],"controller"=>$ruta_default["controller"],"action"=>$ruta_default["action"],"params"=>array());
                 }
             }           
-            elseif(strpos($url,$ruta_pura) === 0) {
+            elseif(strpos($url,$ruta_pura) === 0 && $ruta_pura != "/") {
                 if(count($variables_ruta) > 0) {
                     $params_str = str_replace($ruta_pura, "", $url);
                     
