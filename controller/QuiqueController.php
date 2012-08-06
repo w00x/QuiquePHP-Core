@@ -3,7 +3,7 @@
 class QuiqueController {
     private $vista;
     private $controller;
-    private $__params;
+    protected $__params;
     
     public function __construct() {
         $helper_path = APP_PATH.'/'.MODULE_NAME.'/helpers/'.CONTROLLER_NAME.'_helper.php';
@@ -120,6 +120,10 @@ class QuiqueController {
     
     public function set_params($par) {
         $this->__params = $par;
+    }
+    
+    public function get_params() {
+        return $this->__params;
     }
     
     public function echo_meta_charset() {
