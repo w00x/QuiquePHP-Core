@@ -92,7 +92,7 @@ class QuiqueRoute {
                     return array("app"=>$ruta_default["app"],"controller"=>$ruta_default["controller"],"action"=>$ruta_default["action"],"params"=>array());
                 }
             }           
-            elseif(strpos($ruta_pura,$url) === 0) {
+            elseif(strpos($url,$ruta_pura) === 0) {
                 if(count($variables_ruta) > 0) {
                     $params_str = str_replace($ruta_pura, "", $url);
                     
@@ -139,7 +139,6 @@ class QuiqueRoute {
                                     $ex->echoHTMLMessage();
                                 }
                             }
-                            
                             return array("app"=>$routes[$key]["app"],"controller"=>$routes[$key]["controller"],"action"=>$routes[$key]["action"],"params"=>$params);
                         }
                     }
