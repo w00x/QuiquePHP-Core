@@ -109,9 +109,10 @@ header('Content-type: text/html; charset='.ENCODING);
 $require_path = APP_PATH.'/'.MODULE_NAME.'/controller/'.CONTROLLER_NAME.'_controller.php';
 $require_controller_path = APP_PATH.'/'.MODULE_NAME.'/controller/controller.php';
 $require_model_path = APP_PATH.'/'.MODULE_NAME.'/model/model.php';
+$require_helper_path = APP_PATH.'/'.MODULE_NAME.'/helpers/'.CONTROLLER_NAME.'_helper.php';
 
-defined('LIB_APP_PATH') || define('LIB_APP_PATH', realpath(dirname(__FILE__) . '/../apps/'.MODULE_NAME.'/libs'));
-defined('MODE_APPL_PATH') || define('MODE_APPL_PATH', realpath(dirname(__FILE__) . '/../apps/'.MODULE_NAME.'/model'));
+defined('LIB_APP_PATH') || define('LIB_APP_PATH', realpath(PROJECT_PATH . '/apps/'.MODULE_NAME.'/libs'));
+defined('MODEL_APP_PATH') || define('MODEL_APP_PATH', realpath(PROJECT_PATH . '/apps/'.MODULE_NAME.'/model'));
 
 set_include_path(implode(PATH_SEPARATOR, array(
     realpath(LIB_APP_PATH),
@@ -119,16 +120,17 @@ set_include_path(implode(PATH_SEPARATOR, array(
 )));
 
 set_include_path(implode(PATH_SEPARATOR, array(
-    realpath(MODE_APPL_PATH),
+    realpath(MODEL_APP_PATH),
     get_include_path(),
 )));
-
 
 if(file_exists($require_path)) {
     try {
         require_once $require_controller_path;
         require_once $require_model_path;
         require_once $require_path;
+        require_once $require_helper_path;
+        
         $class_name = CONTROLLER_NAME.'_controller';
         $controller = new $class_name();
         $controller->set_params($params);
