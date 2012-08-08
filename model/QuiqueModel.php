@@ -102,8 +102,8 @@ class QuiqueModel {
         }
         elseif(strpos($function_name,"findAllBy") !== FALSE) {
             $column = strtolower(str_replace("findAllBy", "", $function_name));
-            $val = $this->where($column." = :".$column." LIMIT 1", array(":".$column => $arguments[0]));
-            return $val[0];
+            $val = $this->where($column." = :".$column, array(":".$column => $arguments[0]));
+            return $val;
         }
         elseif(strpos($function_name,"deleteBy") !== FALSE) {
             $column = strtolower(str_replace("deleteBy", "", $function_name));
