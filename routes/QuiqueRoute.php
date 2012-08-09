@@ -207,12 +207,49 @@ class QuiqueRoute {
     }
     
     private function get_ruta_by_nombre($name,$routes) {
-        foreach($routes as $route) {
+        foreach($routes as $key => $route) {
             if($route["name"] == $name) {
+                $route["url"] = $key;
                 return $route;
             }
         }
-        return "";
+        return false;
+    }
+    
+    public function url_for($name_route,$params = array()) {
+        $path_routes = CONFIG_PATH.'/routes.yml';
+        if(file_exists($path_routes)) {
+            $routes = Spyc::YAMLLoad($path_routes);
+        }
+        else {
+            return false;
+        }
+        
+        $ruta = $this->get_ruta_by_nombre($name_route,$routes);
+        $url = $ruta["url"];
+        $variables_route = $this->variables_route($url);
+        
+        if($ruta !== false && strpos($url,":") !== false && count($variables_route) == count($params)) {
+            foreach($params as $key => $param) {
+                $url = str_replace($key, $param, $url);
+            }
+            
+            if(strpos($url,":") === false) {
+                return URL_BASE.$url;
+            }
+            else {
+                return false;
+            }
+        }
+        elseif(count($variables_route) != count($params)) {
+            return false;
+        }
+        elseif($ruta === false) {
+            return false;
+        }
+        else {
+            return URL_BASE.$url;
+        }
     }
 }
 ?>

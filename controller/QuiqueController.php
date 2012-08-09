@@ -83,7 +83,7 @@ class QuiqueController {
 
             foreach ($list_css as $css_file) {
                 if($css_file != "." && $css_file != "..") {
-                    echo '<link href="'.URL_BASE.'assets/'.MODULE_NAME.'/css/'.$css_file.'" rel="stylesheet" type="text/css">'.PHP_EOL;
+                    echo '<link href="'.URL_BASE.'/assets/'.MODULE_NAME.'/css/'.$css_file.'" rel="stylesheet" type="text/css">'.PHP_EOL;
                 }
             }
         }
@@ -104,7 +104,7 @@ class QuiqueController {
 
             foreach ($list_js as $js_file) {
                 if($js_file != "." && $js_file != "..") {
-                    echo '<script type="text/javascript" src="'.URL_BASE.'assets/'.MODULE_NAME.'/js/'.$js_file.'"></script>'.PHP_EOL;
+                    echo '<script type="text/javascript" src="'.URL_BASE.'/assets/'.MODULE_NAME.'/js/'.$js_file.'"></script>'.PHP_EOL;
                 }
             }
         }
@@ -128,5 +128,10 @@ class QuiqueController {
     
     public function echo_meta_charset() {
         echo '<meta charset="'.ENCODING.'" />';
+    }
+    
+    public function url_for($name_route,$params = array()) {
+        $route = new QuiqueRoute();
+        return $route->url_for($name_route,$params);
     }
 }
