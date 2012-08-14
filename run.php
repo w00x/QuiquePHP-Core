@@ -88,6 +88,9 @@ else {
     ini_set('display_errors','Off');
 }
 
+$time_zone = $config[MODULE_NAME]["timezone"];
+date_default_timezone_set($time_zone);
+
 $enconding = $config[MODULE_NAME]["encoding"];
 
 defined('SHOW_ERRORS') || define('SHOW_ERRORS', $show_errors);

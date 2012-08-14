@@ -70,24 +70,44 @@ class QuiqueModel {
         $this->sql_select = " ".$columns." ";
     }
     
-    public function find($id) {
+    public function find($id,$fetch_style = PDO::FETCH_ASSOC) {
         $sql = "SELECT {$this->sql_select} FROM {$this->model_name} WHERE id = :id";
-        return $this->sql_query($sql,array(":id"=>$id))->fetchAll(PDO::FETCH_ASSOC);
+        return $this->sql_query($sql,array(":id"=>$id))->fetchAll($fetch_style);
     }
     
-    public function delete($id) {
+    public function find_stmt($id) {
+        $sql = "SELECT {$this->sql_select} FROM {$this->model_name} WHERE id = :id";
+        return $this->sql_query($sql,array(":id"=>$id));
+    }
+    
+    public function delete($id,$fetch_style = PDO::FETCH_ASSOC) {
         $sql = "DELETE FROM {$this->model_name} WHERE id = :id";
-        return $this->sql_query($sql,array(":id"=>$id))->fetchAll(PDO::FETCH_ASSOC);
+        return $this->sql_query($sql,array(":id"=>$id))->fetchAll($fetch_style);
     }
     
-    public function where($sql_where,$arr_params = array()) {
+    public function delete_stmt($id) {
+        $sql = "DELETE FROM {$this->model_name} WHERE id = :id";
+        return $this->sql_query($sql,array(":id"=>$id));
+    }
+    
+    public function where($sql_where,$arr_params = array(),$fetch_style = PDO::FETCH_ASSOC) {
         $sql = "SELECT {$this->sql_select} FROM {$this->model_name} WHERE ";
-        return $this->sql_query($sql.$sql_where,$arr_params)->fetchAll(PDO::FETCH_ASSOC);
+        return $this->sql_query($sql.$sql_where,$arr_params)->fetchAll($fetch_style);
     }
     
-    public function delete_where($sql_where,$arr_params = array()) {
+    public function where_stmt($sql_where,$arr_params = array()) {
+        $sql = "SELECT {$this->sql_select} FROM {$this->model_name} WHERE ";
+        return $this->sql_query($sql.$sql_where,$arr_params);
+    }
+    
+    public function delete_where($sql_where, $arr_params = array(), $fetch_style = PDO::FETCH_ASSOC) {
         $sql = "DELETE FROM {$this->model_name} WHERE ";
-        return $this->sql_query($sql.$sql_where,$arr_params)->fetchAll(PDO::FETCH_ASSOC);
+        return $this->sql_query($sql.$sql_where,$arr_params)->fetchAll($fetch_style);
+    }
+    
+    public function delete_where_stmt($sql_where,$arr_params = array()) {
+        $sql = "DELETE FROM {$this->model_name} WHERE ";
+        return $this->sql_query($sql.$sql_where,$arr_params);
     }
     
     public function __call($name, $arguments) {
@@ -110,9 +130,34 @@ class QuiqueModel {
             $val = $this->delete_where($column." = :".$column, array(":".$column => $arguments[0]));
             return $val[0];
         }
+        elseif(strpos($function_name,"findStmtBy") !== FALSE) {
+            $column = strtolower(str_replace("findBy", "", $function_name));
+            $val = $this->where_stmt($column." = :".$column." LIMIT 1", array(":".$column => $arguments[0]));
+            return $val;
+        }
+        elseif(strpos($function_name,"findAllStmtBy") !== FALSE) {
+            $column = strtolower(str_replace("findAllBy", "", $function_name));
+            $val = $this->where_stmt($column." = :".$column, array(":".$column => $arguments[0]));
+            return $val;
+        }
+        elseif(strpos($function_name,"deleteStmtBy") !== FALSE) {
+            $column = strtolower(str_replace("deleteBy", "", $function_name));
+            $val = $this->delete_where_stmt($column." = :".$column, array(":".$column => $arguments[0]));
+            return $val;
+        }
     }
     
     public function set_model_name($model_name) {
         $this->model_name = $model_name;
+    }
+    
+    public function selectAll($fetch_style = PDO::FETCH_ASSOC) {
+        $sql = "SELECT {$this->sql_select} FROM {$this->model_name}";
+        return $this->sql_query($sql)->fetchAll($fetch_style);
+    }
+    
+    public function selectAllStmt() {
+        $sql = "SELECT {$this->sql_select} FROM {$this->model_name}";
+        return $this->sql_query($sql);
     }
 }

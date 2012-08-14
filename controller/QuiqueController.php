@@ -134,4 +134,8 @@ class QuiqueController {
         $route = new QuiqueRoute();
         return $route->url_for($name_route,$params);
     }
+    
+    public function url_base_assets() {
+        return URL_BASE."/assets/".MODULE_NAME;
+    }
 }
