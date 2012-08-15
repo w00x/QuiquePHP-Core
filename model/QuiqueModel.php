@@ -4,9 +4,11 @@ class QuiqueModel {
     private $dbh;
     private $model_name;
     private $sql_select;
+    private $sql_inner;
     
     public function __construct() {
         $this->sql_select = " * ";
+        $this->sql_inner = "  ";
         
         $class_name = strtolower(get_class($this));
         $this->model_name = "";
@@ -70,13 +72,17 @@ class QuiqueModel {
         $this->sql_select = " ".$columns." ";
     }
     
+    public function join($sql_join) {
+        $this->sql_inner = " {$sql_join} ";
+    }
+    
     public function find($id,$fetch_style = PDO::FETCH_ASSOC) {
-        $sql = "SELECT {$this->sql_select} FROM {$this->model_name} WHERE id = :id";
+        $sql = "SELECT {$this->sql_select} FROM {$this->model_name} {$this->sql_inner} WHERE id = :id";
         return $this->sql_query($sql,array(":id"=>$id))->fetchAll($fetch_style);
     }
     
     public function find_stmt($id) {
-        $sql = "SELECT {$this->sql_select} FROM {$this->model_name} WHERE id = :id";
+        $sql = "SELECT {$this->sql_select} FROM {$this->model_name} {$this->sql_inner} WHERE id = :id";
         return $this->sql_query($sql,array(":id"=>$id));
     }
     
@@ -91,12 +97,12 @@ class QuiqueModel {
     }
     
     public function where($sql_where,$arr_params = array(),$fetch_style = PDO::FETCH_ASSOC) {
-        $sql = "SELECT {$this->sql_select} FROM {$this->model_name} WHERE ";
+        $sql = "SELECT {$this->sql_select} FROM {$this->model_name} {$this->sql_inner} WHERE ";
         return $this->sql_query($sql.$sql_where,$arr_params)->fetchAll($fetch_style);
     }
     
     public function where_stmt($sql_where,$arr_params = array()) {
-        $sql = "SELECT {$this->sql_select} FROM {$this->model_name} WHERE ";
+        $sql = "SELECT {$this->sql_select} FROM {$this->model_name} {$this->sql_inner} WHERE ";
         return $this->sql_query($sql.$sql_where,$arr_params);
     }
     
@@ -152,12 +158,12 @@ class QuiqueModel {
     }
     
     public function selectAll($fetch_style = PDO::FETCH_ASSOC) {
-        $sql = "SELECT {$this->sql_select} FROM {$this->model_name}";
+        $sql = "SELECT {$this->sql_select} FROM {$this->model_name} {$this->sql_inner}";
         return $this->sql_query($sql)->fetchAll($fetch_style);
     }
     
     public function selectAllStmt() {
-        $sql = "SELECT {$this->sql_select} FROM {$this->model_name}";
+        $sql = "SELECT {$this->sql_select} FROM {$this->model_name} {$this->sql_inner}";
         return $this->sql_query($sql);
     }
 }
