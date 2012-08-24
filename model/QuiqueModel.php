@@ -78,7 +78,7 @@ class QuiqueModel {
     
     public function find($id,$fetch_style = PDO::FETCH_ASSOC) {
         $sql = "SELECT {$this->sql_select} FROM {$this->model_name} {$this->sql_inner} WHERE id = :id";
-        return $this->sql_query($sql,array(":id"=>$id))->fetchAll($fetch_style);
+        return $this->sql_query($sql,array(":id"=>$id))->fetch($fetch_style);
     }
     
     public function find_stmt($id) {
