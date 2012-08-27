@@ -138,4 +138,12 @@ class QuiqueController {
     public function url_base_assets() {
         return URL_BASE."/assets/".MODULE_NAME;
     }
+    
+    public function post($key_param) {
+        return htmlentities($_POST[$key_param]);
+    }
+    
+    public function get($key_param) {
+        return htmlentities($_GET[$key_param]);
+    }
 }
