@@ -13,6 +13,7 @@ class QuiqueController {
         }
         $this->controller = CONTROLLER_NAME;
         $this->load_all_models();
+        session_start();
     }
     
     public function view($vista,$layout = "layout") {
@@ -140,10 +141,80 @@ class QuiqueController {
     }
     
     public function post($key_param) {
-        return htmlentities($_POST[$key_param]);
+        if(isset($_POST[$key_param])) {
+            return htmlentities($_POST[$key_param]);
+        }
+        else {
+            return false;
+        }
+        
     }
     
     public function get($key_param) {
-        return htmlentities($_GET[$key_param]);
+        if(isset($_POST[$key_param])) {
+            return htmlentities($_GET[$key_param]);
+        }
+        else {
+            return false;
+        }
+    }
+    
+    public function set_flash($message) {
+        $_SESSION["flash"] = $message;
+        return $message;
+    }
+    
+    public function set_err_flash($message) {
+        $_SESSION["err_flash"] = $message;
+        $_SESSION["is_error"] = true;
+        return $message;
+    }
+    
+    public function get_flash() {
+        if(isset($_SESSION["flash"])) {
+            $flash = $_SESSION["flash"];
+            unset($_SESSION["flash"]);
+            return $flash;
+        }
+        else {
+            return false;
+        }
+    }
+    
+    public function get_err_flash() {
+        if(isset($_SESSION["err_flash"])) {
+            $flash = $_SESSION["err_flash"];
+            unset($_SESSION["err_flash"]);
+            return $flash;
+        }
+        else {
+            return false;
+        }
+    }
+    
+    public function set_error($is_error) {
+        $_SESSION["is_error"] = $is_error;
+        return $is_error;
+    }
+    
+    public function is_error() {
+        if(isset($_SESSION["is_error"])) {
+            $is_error = $_SESSION["is_error"];
+            unset($_SESSION["is_error"]);
+            return $is_error;
+        }
+        else {
+            return false;
+        }
+    }
+    
+    public function redirect($route) {
+        $url = $this->url_for($route);
+        if(!$url) {
+            return false;
+        }
+        
+        header('Location: '.$url) ;
+        die;
     }
 }
