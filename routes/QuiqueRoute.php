@@ -191,6 +191,10 @@ class QuiqueRoute {
             $url_tmp = $url_tmp."/";
         }
         
+        if(strpos($url_tmp, ":") === false) {
+            return array();
+        }
+        
         $variables = array();
         do {
             $pos_dos_puntos = strpos($url_tmp, ":");
@@ -226,6 +230,7 @@ class QuiqueRoute {
         }
         
         $ruta = $this->get_ruta_by_nombre($name_route,$routes);
+        
         $url = $ruta["url"];
         $variables_route = $this->variables_route($url);
         
@@ -241,7 +246,7 @@ class QuiqueRoute {
                 return false;
             }
         }
-        elseif(count($variables_route) != count($params)) {
+        elseif(count($variables_route) > 0 && (count($variables_route) != count($params))) {
             return false;
         }
         elseif($ruta === false) {
