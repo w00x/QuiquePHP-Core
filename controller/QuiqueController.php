@@ -42,12 +42,13 @@ class QuiqueController {
     
     public function load_views() {
         $view_path = APP_PATH.'/'.MODULE_NAME.'/view/'.$this->controller.'/'.$this->vista.'.php';
+        
         if(file_exists($view_path)) {
             require_once $view_path;
         }
         else {
             try {
-                throw new QuiqueExceptions(SHOW_ERRORS,"Error View","View <b>".$this->vista."</b> no existe");
+                throw new QuiqueExceptions(SHOW_ERRORS,"Error View","View <b>".$this->vista."</b> en <b>".$this->controller."</b> no existe");
             }
             catch(QuiqueExceptions $ex) {
                 $ex->echoHTMLMessage();
@@ -69,7 +70,7 @@ class QuiqueController {
         }
         else {
             try {
-                throw new QuiqueExceptions(SHOW_ERRORS,"Error Application","Application <b>".MODULE_NAME."</b> no existe");
+                throw new QuiqueExceptions(SHOW_ERRORS,"Error Application","Application <b>".MODULE_NAME."</b> no se encontro el directorio model");
             }
             catch(QuiqueExceptions $ex) {
                 $ex->echoHTMLMessage();
@@ -79,6 +80,7 @@ class QuiqueController {
     
     public function load_css() {
         $css_path = PROJECT_PATH.'/public/assets/'.MODULE_NAME.'/css/';
+
         if(is_dir($css_path)) {
             $list_css = scandir($css_path);
 
@@ -90,7 +92,7 @@ class QuiqueController {
         }
         else {
             try {
-                throw new QuiqueExceptions(SHOW_ERRORS,"Error Application","Application <b>".MODULE_NAME."</b> no existe");
+                throw new QuiqueExceptions(SHOW_ERRORS,"Error Application","Application <b>".MODULE_NAME."</b> no contiene directorio <b>css</b> en public");
             }
             catch(QuiqueExceptions $ex) {
                 $ex->echoHTMLMessage();
@@ -100,10 +102,12 @@ class QuiqueController {
     
     public function load_js() {
         $js_path = PROJECT_PATH.'/public/assets/'.MODULE_NAME.'/js/';
+
         if($js_path) {
             $list_js = scandir($js_path);
-
+            
             foreach ($list_js as $js_file) {
+
                 if($js_file != "." && $js_file != "..") {
                     echo '<script type="text/javascript" src="'.URL_BASE.'/assets/'.MODULE_NAME.'/js/'.$js_file.'"></script>'.PHP_EOL;
                 }
@@ -111,7 +115,7 @@ class QuiqueController {
         }
         else {
             try {
-                throw new QuiqueExceptions(SHOW_ERRORS,"Error Application","Application <b>".MODULE_NAME."</b> no existe");
+                throw new QuiqueExceptions(SHOW_ERRORS,"Error Application","Application <b>".MODULE_NAME."</b> no contiene directorio <b>js</b> en public");
             }
             catch(QuiqueExceptions $ex) {
                 $ex->echoHTMLMessage();

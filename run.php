@@ -56,6 +56,7 @@ else {
         elseif(count($requestURI) == 2) {
             define('MODULE_NAME','default');
             define('CONTROLLER_NAME',$requestURI[1]);
+            
             if(is_null($requestURI[2])) {
                 define('ACTION_NAME',null);
             }
